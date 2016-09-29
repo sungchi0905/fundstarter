@@ -16,8 +16,25 @@ app.get('/', function(request, response) {
     });*/
 
     // Blocking
-    var data = fs.readFileSync(fileName);
+    /* var data = fs.readFileSync(fileName);
     response.send(data.toString());
+    */
+    // Part 2
+    fs.exists(fileName, function(exists) {
+	  if (exists) {
+	            fs.stat(fileName, function(error, stats) {
+			    fs.open(fileName, "r", function(error, fd) {
+				var buffer = new Buffer(stats.size);
+
+				fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+				          var data = buffer.toString("utf8", 0, buffer.length);
+				          response.send(data.toString());
+				          fs.close(fd);
+				        });
+				  });
+			  });
+	              }
+	});
 /* sends an entire HTTP response to the client,                                                                                                                                     
  including headers and content,                                                                                                                                                     
  which is why you can only call once*/
