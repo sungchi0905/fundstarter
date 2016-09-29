@@ -11,9 +11,13 @@ app.get('/', function(request, response) {
 
     var fileName = "public/index.html";
     // Non-blocking
-    fs.readFile(fileName, function(err, data){
+    /*fs.readFile(fileName, function(err, data){
         response.send(data.toString());
-    });
+    });*/
+
+    // Blocking
+    var data = fs.readFileSync(fileName);
+    response.send(data.toString());
 /* sends an entire HTTP response to the client,                                                                                                                                     
  including headers and content,                                                                                                                                                     
  which is why you can only call once*/
