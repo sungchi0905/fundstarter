@@ -19,7 +19,7 @@ http.createServer(function (request, response) {
 	  response.end();
     });
 
-}).listen(parseInt(port, 10));
+}).listen(process.env.PORT || 8080);
 
 
 console.log("Node app is running at\n  =>:" + 8080 + "/\nCTRL + C to shutdown");
