@@ -1,47 +1,23 @@
-var express = require('express')
-var app = express()
+var http = require("http");
 var fs = require("fs");
-
-app.set('port', (process.env.PORT || 8080))
-//app.use(express.static(__dirname + '/public'))
-
-//__dirname returns the directory that the currently executing script is in.
-
-app.get('/', function(request, response) {
-
+//web server object
+http.createServer(function (request, response) { 
     var fileName = "public/index.html";
     // Non-blocking
-    /*fs.readFile(fileName, function(err, data){
-        response.send(data.toString());
-    });*/
+    fs.readFile(fileName, function(err, data){
+        //response.send(data.toString());
+	if(err) {        
+	    response.writeHead(500, {"Content-Type": "text/plain"});
+	    response.write(err + "\n");
+	    response.end();
+	    return;
+	    }
+	  response.writeHead(200);
+	  response.write(data, "binary");
+	  response.end();
+    });
 
-    // Blocking
-    /* var data = fs.readFileSync(fileName);
-    response.send(data.toString());
-    */
-    // Part 2
-    fs.exists(fileName, function(exists) {
-	  if (exists) {
-	            fs.stat(fileName, function(error, stats) {
-			    fs.open(fileName, "r", function(error, fd) {
-				var buffer = new Buffer(stats.size);
-
-				fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-				          var data = buffer.toString("utf8", 0, buffer.length);
-				          response.send(data.toString());
-				          fs.close(fd);
-				        });
-				  });
-			  });
-	              }
-	});
-/* sends an entire HTTP response to the client,                                                                                                                                     
- including headers and content,                                                                                                                                                     
- which is why you can only call once*/
+}).listen(8080);
 
 
-})
-
-app.listen(app.get('port'), function() {
-  console.log("Node app is running at :" + app.get('port'))
-})
+console.log("Node app is running at\n  =>:" + 8080 + "/\nCTRL + C to shutdown");
