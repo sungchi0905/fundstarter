@@ -6,7 +6,7 @@ port = process.argv[2] || 8080;
 http.createServer(function (request, response) { 
     var fileName = "public/index.html";
     // Non-blocking
-    fs.readFile(fileName, function(err, data){
+    /*fs.readFile(fileName, function(err, data){
         //response.send(data.toString());
 	if(err) {        
 	    response.writeHead(500, {"Content-Type": "text/plain"});
@@ -17,8 +17,13 @@ http.createServer(function (request, response) {
 	  response.writeHead(200);
 	  response.write(data, "binary");
 	  response.end();
-    });
-
+    });*/
+    // Blocking
+    var data = fs.readFileSync(fileName);
+      response.writeHead(200);
+      response.write(data, "binary");
+      response.end();
+    
 }).listen(process.env.PORT || 8080);
 
 
