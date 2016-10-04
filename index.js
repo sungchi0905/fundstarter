@@ -1,5 +1,7 @@
 var http = require("http");
 var fs = require("fs");
+port = process.argv[2] || 8080;
+
 //web server object
 http.createServer(function (request, response) { 
     var fileName = "public/index.html";
@@ -17,7 +19,7 @@ http.createServer(function (request, response) {
 	  response.end();
     });
 
-}).listen(8080);
+}).listen(parseInt(port, 10));
 
 
 console.log("Node app is running at\n  =>:" + 8080 + "/\nCTRL + C to shutdown");
