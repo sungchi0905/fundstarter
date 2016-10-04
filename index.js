@@ -19,10 +19,28 @@ http.createServer(function (request, response) {
 	  response.end();
     });*/
     // Blocking
-    var data = fs.readFileSync(fileName);
+    /*var data = fs.readFileSync(fileName);
       response.writeHead(200);
       response.write(data, "binary");
-      response.end();
+      response.end();*/
+    // Part 2
+    fs.exists(fileName, function(exists) {
+	  if (exists) {
+	            fs.stat(fileName, function(error, stats) {
+			    fs.open(fileName, "r", function(error, fd) {
+				var buffer = new Buffer(stats.size);
+
+				fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+				          var data = buffer.toString("utf8", 0, buffer.length);
+				          response.writeHead(200);
+				      response.write(data, "binary");
+				      response.end();
+				          fs.close(fd);
+				        });
+				  });
+			  });
+	              }
+	});
     
 }).listen(process.env.PORT || 8080);
 
